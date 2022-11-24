@@ -1,7 +1,7 @@
 import "./App.css";
 import TodoForm from "./components/TodoForm";
 import React from "react";
-import { useState} from "react";
+import { useState } from "react";
 import { createContext } from "react";
 import Todo from "./components/Todo";
 
@@ -9,7 +9,7 @@ export const TodoContext = createContext();
 
 function App() {
   const [todos, setTodos] = useState(() => {
-    // get the todos from localstorage
+    // get the todos from local storage
     const savedTodos = localStorage.getItem("todos");
     // if there are todos stored
     if (savedTodos) {
@@ -20,54 +20,56 @@ function App() {
       // return an empty array
       return [];
     }
-  } );
+  });
   const [input, setInput] = useState("");
 
   function addTodo(e) {
     e.preventDefault();
-    // putting the state and the new todo to setTodos
-    setTodos(
-      todos,
-      todos.push({
-        id: Math.floor(Math.random() * 10000),
-        text: input,
-        isCompleted: false,
-      }),
-      todos.reverse()
-    );
-    console.log(todos);
+
+    if (input !== "") {
+      // putting the state and the new todo to setTodos
+      setTodos(
+        todos,
+        todos.push({
+          id: Math.floor(Math.random() * 10000),
+          text: input,
+          isCompleted: false,
+        }),
+        todos.reverse()
+      );
+    }
     setInput("");
     // save the todos to local storage here instead using useEffect because we prevent the page from reloading
     localStorage.setItem("todos", JSON.stringify(todos));
-
   }
   function handleDelete(id) {
     // filter the todos and return the todos that don't match the id
     const newTodos = todos.filter((todo) => todo.id !== id);
     // set the new state
     setTodos(newTodos);
+    // set the  local storage new state without the deleted todo
+    localStorage.setItem("todos", JSON.stringify(newTodos));
   }
 
-  // function handleEdit(id, text) {
-  //   // edit the objet with the id
-  //   const newTodos = todos.map((todo) => {
-  //     if (todo.id === id) {
-  //       todo.text = text;
-  //     }
-  //     return todo;
-  //   });
-  //   // set the new state
-  //   setTodos(newTodos);
-  //   console.log(todos);
-  // }
+  const [newInput, setNewInput] = useState("");
+  const [editing, setEditing] = useState(false);
+
+  function editTodo(id) {
+    // find the todo that matches the id
+    const todo = todos.find((todo) => todo.id === id);
+    todo.text = newInput;
+  }
 
   const globalStates = {
-    todos: todos,
-    input: input,
+    todos,
+    input,
+    newInput,
     addTodo,
+    editTodo,
     handleDelete,
     setTodos,
     setInput,
+    setNewInput,
   };
 
   return (
@@ -77,7 +79,7 @@ function App() {
           <h1 className="mx-auto text-xl">Todo App</h1>
           <TodoContext.Provider value={globalStates}>
             <TodoForm />
-            <Todo />
+            <Todo  editing={editing} setEditing={setEditing} />
           </TodoContext.Provider>
         </div>
       </div>
