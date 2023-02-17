@@ -22,7 +22,6 @@ function App() {
     }
   });
   const [input, setInput] = useState("");
-
   function addTodo(e) {
     e.preventDefault();
 
@@ -58,6 +57,22 @@ function App() {
     // find the todo that matches the id
     const todo = todos.find((todo) => todo.id === id);
     todo.text = newInput;
+    localStorage.setItem("todos", JSON.stringify(todos));
+  }
+
+  const [isCompletedCss, setIsCompletedCss] = useState('');
+
+  function handleComplete(id) {
+    const todo = todos.find((todo) => todo.id === id);
+    // toggle the isCompleted between true and false
+     todo.isCompleted = !todo.isCompleted;
+    if (todo.isCompleted) {
+      setIsCompletedCss("line-through cursor-pointer text-gray-400");
+    } else {
+      setIsCompletedCss("pl-2 cursor-pointer");
+    }
+    localStorage.setItem("todos", JSON.stringify(todos));
+
   }
 
   const globalStates = {
@@ -70,6 +85,8 @@ function App() {
     setTodos,
     setInput,
     setNewInput,
+    handleComplete,
+    isCompletedCss,
   };
 
   return (
@@ -79,7 +96,7 @@ function App() {
           <h1 className="mx-auto text-xl">Todo App</h1>
           <TodoContext.Provider value={globalStates}>
             <TodoForm />
-            <Todo  editing={editing} setEditing={setEditing} />
+            <Todo editing={editing} setEditing={setEditing} />
           </TodoContext.Provider>
         </div>
       </div>

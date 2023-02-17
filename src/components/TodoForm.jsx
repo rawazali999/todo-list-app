@@ -3,10 +3,8 @@ import { useContext } from "react";
 import { TodoContext } from "../App";
 
 export default function TodoForm() {
-  
-
   const myContext = useContext(TodoContext);
-  
+
   return (
     <>
       <form className=" flex justify-center items-center">
@@ -16,7 +14,9 @@ export default function TodoForm() {
           type={"text"}
           value={myContext.input}
           placeholder="What do you want to do?"
-          onChange={(e) => myContext.setInput(e.target.value,e.preventDefault())}
+          onChange={(e) =>
+            myContext.setInput(e.target.value, e.preventDefault())
+          }
         />
         <button
           onClick={myContext.addTodo}

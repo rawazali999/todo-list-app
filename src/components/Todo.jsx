@@ -9,7 +9,7 @@ export default function Todo({ setEditing, editing }) {
   const [editId, setEditId] = useState();
   const [editInput, setEditInput] = useState();
 
-  function handleClick(id,text) {
+  function handleClick(id, text) {
     setEditing(true);
     setEditId(id);
     setEditInput(text);
@@ -27,10 +27,18 @@ export default function Todo({ setEditing, editing }) {
               className="border-2 border-cyan-900 py-1 w-full my-2 px-2 rounded-md bg-white text-cyan-900"
             >
               <div className="flex justify-between">
-                <div>{todo.text}</div>
+                <div
+                  onClick={() => {
+                    myContext.handleComplete(todo.id);
+                  }}
+                  // add css class based on todo.isCompleted
+                  className={`${todo.isCompleted ? "line-through cursor-pointer text-gray-400" : "cursor-pointer "}`}
+                >
+                  {todo.text}
+                </div>
                 <div className="flex space-x-2">
                   {/* we should use arrow to avoid too many error renders */}
-                  <button onClick={() => handleClick(todo.id,todo.text)}> 
+                  <button onClick={() => handleClick(todo.id, todo.text)}>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
