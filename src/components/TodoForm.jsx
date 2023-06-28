@@ -19,7 +19,10 @@ export default function TodoForm() {
           }
         />
         <button
-          onClick={myContext.addTodo}
+          onClick={(e) => {
+            e.preventDefault();
+            myContext.addTodo(e);
+          }}
           className="bg-cyan-900 text-white px-4 py-2 rounded-r-md  border-2 border-cyan-900"
         >
           <svg

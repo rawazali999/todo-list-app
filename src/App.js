@@ -4,6 +4,7 @@ import React from "react";
 import { useState } from "react";
 import { createContext } from "react";
 import Todo from "./components/Todo";
+import { Controls } from "./components/Controls";
 
 export const TodoContext = createContext();
 
@@ -21,26 +22,25 @@ function App() {
       return [];
     }
   });
-  const [input, setInput] = useState("");
-  function addTodo(e) {
-    e.preventDefault();
 
+  const [originalTodos, setOriginalTodos] = useState(todos);
+
+  const [input, setInput] = useState("");
+  function addTodo() {
     if (input !== "") {
-      // putting the state and the new todo to setTodos
-      setTodos(
-        todos,
-        todos.push({
-          id: Math.floor(Math.random() * 10000),
-          text: input,
-          isCompleted: false,
-        }),
-        todos.reverse()
-      );
+      const newTodo = {
+        id: Math.floor(Math.random() * 10000),
+        text: input,
+        isCompleted: false,
+      };
+      setTodos([...todos, newTodo]);
+      setOriginalTodos([...originalTodos, newTodo]);
     }
     setInput("");
     // save the todos to local storage here instead using useEffect because we prevent the page from reloading
     localStorage.setItem("todos", JSON.stringify(todos));
   }
+
   function handleDelete(id) {
     // filter the todos and return the todos that don't match the id
     const newTodos = todos.filter((todo) => todo.id !== id);
@@ -60,19 +60,16 @@ function App() {
     localStorage.setItem("todos", JSON.stringify(todos));
   }
 
-  const [isCompletedCss, setIsCompletedCss] = useState('');
+  const [isCompletedCss, setIsCompletedCss] = useState("");
 
   function handleComplete(id) {
     const todo = todos.find((todo) => todo.id === id);
     // toggle the isCompleted between true and false
-     todo.isCompleted = !todo.isCompleted;
-    if (todo.isCompleted) {
-      setIsCompletedCss("line-through cursor-pointer text-gray-400");
-    } else {
-      setIsCompletedCss("pl-2 cursor-pointer");
-    }
+    todo.isCompleted = !todo.isCompleted;
+    todo.isCompleted
+      ? setIsCompletedCss("line-through cursor-pointer text-gray-400")
+      : setIsCompletedCss("pl-2 cursor-pointer");
     localStorage.setItem("todos", JSON.stringify(todos));
-
   }
 
   const globalStates = {
@@ -87,18 +84,21 @@ function App() {
     setNewInput,
     handleComplete,
     isCompletedCss,
+    originalTodos,
+    setOriginalTodos,
   };
 
   return (
-    <div className="w-screen h-screen  bg-cyan-100">
-      <div className=" flex justify-center py-10 text-white">
-        <div className="flex flex-col m-4 bg-cyan-700 space-y-2 shadow rounded-lg   p-4">
-          <h1 className="mx-auto text-xl">Todo App</h1>
-          <TodoContext.Provider value={globalStates}>
+    <div className="w-screen h-screen flex justify-center bg-cyan-100">
+      <div className=" flex flex-col  py-10 text-white">
+        <TodoContext.Provider value={globalStates}>
+          <div className="flex flex-col m-4 bg-cyan-700 space-y-2 shadow rounded-lg p-4">
+            <h1 className="mx-auto text-xl">Todo App</h1>
             <TodoForm />
             <Todo editing={editing} setEditing={setEditing} />
-          </TodoContext.Provider>
-        </div>
+          </div>
+          <Controls />{" "}
+        </TodoContext.Provider>
       </div>
     </div>
   );
