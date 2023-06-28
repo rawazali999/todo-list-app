@@ -23,23 +23,23 @@ The following technologies were used to build this app:
 
 1. Clone the repository:
     
-    ```bash
+    ```
   git clone https://github.com/your-username/react-todo-app.git
     ```
     
 2. Change into the project directory:
         
-        ```bash
+        ```
     cd react-todo-app
         ```
 3. Install the dependencies:
         
-        ```bash
+        ```
     npm install
         ```
 4. Start the development server:
         
-        ```bash
+        ```
     npm start
         ```
 5. Open the app in your browser at http://localhost:3000.
