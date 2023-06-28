@@ -29,19 +29,19 @@ The following technologies were used to build this app:
     
 2. Change into the project directory:
         
-        ```bash
+   ```bash
         cd react-todo-app
-        ```
+   ```
 3. Install the dependencies:
         
-        ```bash
+    ```bash
         npm install
-        ```
+    ```
 4. Start the development server:
         
-        ```bash
+    ```bash
            npm start
-        ```
+    ```
 5. Open the app in your browser at http://localhost:3000.
 
 
